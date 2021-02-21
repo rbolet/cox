@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { useState } from "react";
 
 function App() {
+  const [datasetId, setDatasetId] = useState(null);
+
+  async function getDataset() {
+    const data = await fetch("https://http://api.coxauto-interview.com/api/datasetId");
+    setDatasetId(data);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className="app-container">
+      <header className="header">
+        <div className="button-container">
+          <h4>Get Vehicle Information:</h4>
+          <button className="go-button">GO!</button>
+        </div>
+        <div>
+          <p>
+            Dataset Id: <span>{datasetId}</span>
+          </p>
+        </div>
       </header>
+      <main className="content"></main>
     </div>
   );
 }
