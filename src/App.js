@@ -2,7 +2,7 @@ import "./App.css";
 import { useState } from "react";
 import Vehicles from "./components/Vehicles";
 
-function App() {
+export default function App() {
   const [datasetId, setDatasetId] = useState(null);
 
   async function getDataset() {
@@ -37,5 +37,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
