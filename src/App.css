@@ -1,14 +1,18 @@
 .app-container {
   min-height: 100vh;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .header {
   background-color: darkgray;
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   justify-content: space-between;
   padding: 0 1rem;
+}
+
+.header span {
+  color: blue;
 }
 
 .button-container {

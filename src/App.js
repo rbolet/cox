@@ -3,7 +3,7 @@ import "./App.css";
 import { useState } from "react";
 
 function App() {
-  const [datasetId, setDatasetId] = useState(null);
+  const [datasetId, setDatasetId] = useState("unknown");
 
   async function getDataset() {
     const data = await fetch("https://http://api.coxauto-interview.com/api/datasetId");
