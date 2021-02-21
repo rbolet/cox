@@ -1,15 +1,13 @@
-import logo from "./logo.svg";
 import "./App.css";
 import { useState } from "react";
 
 function App() {
-  const [datasetId, setDatasetId] = useState("unknown");
+  const [datasetId, setDatasetId] = useState(null);
 
   async function getDataset() {
     const data = await fetch("http://api.coxauto-interview.com/api/datasetId").then((res) =>
       res.json()
     );
-    console.log(data);
     setDatasetId(data?.datasetId);
   }
 
@@ -23,9 +21,11 @@ function App() {
           </button>
         </div>
         <div>
-          <p>
-            Dataset Id: <span>{datasetId}</span>
-          </p>
+          {datasetId && (
+            <p>
+              Dataset Id: <span role="note">{datasetId}</span>
+            </p>
+          )}
         </div>
       </header>
       <main className="content"></main>
