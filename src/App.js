@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState } from "react";
+import Vehicles from "./components/Vehicles";
 
 function App() {
   const [datasetId, setDatasetId] = useState(null);
@@ -21,14 +22,18 @@ function App() {
           </button>
         </div>
         <div>
-          {datasetId && (
+          {datasetId ? (
             <p>
               Dataset Id: <span role="note">{datasetId}</span>
             </p>
+          ) : (
+            <p>No Dataset Id</p>
           )}
         </div>
       </header>
-      <main className="content"></main>
+      <main style={{ padding: "1rem" }}>
+        <Vehicles datasetId={datasetId} />
+      </main>
     </div>
   );
 }
