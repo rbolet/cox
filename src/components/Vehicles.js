@@ -4,26 +4,27 @@ import VehicleCard from "./VehicleCard";
 
 export default function Vehicles(props) {
   const { datasetId } = props;
-  const [vehicles, setVehicles] = useState([]);
+  const [vehicleIds, setVehicleIds] = useState([]);
 
-  const getVehicles = useCallback(async () => {
-    const vehiclesArray = await fetch(
+  const getVehicleIds = useCallback(async () => {
+    const data = await fetch(
       `http://api.coxauto-interview.com/api/${datasetId}/vehicles`
     ).then((res) => res.json());
-    console.log(vehiclesArray);
 
-    setVehicles(vehiclesArray.vehicleIds.map((vehicleId) => ({ vehicleId })));
+    setVehicleIds(data.vehicleIds);
   }, [datasetId]);
 
   useEffect(() => {
     if (!datasetId) return;
-    getVehicles();
-  }, [datasetId, getVehicles]);
+    getVehicleIds();
+  }, [datasetId, getVehicleIds]);
 
   return (
     <div className="card-container">
-      {Boolean(vehicles.length) &&
-        vehicles.map((vehicle) => <VehicleCard key={vehicle.vehicleId} vehicle={vehicle} />)}
+      {Boolean(vehicleIds.length) &&
+        vehicleIds.map((vehicleId) => (
+          <VehicleCard key={vehicleId} vehicleId={vehicleId} datasetId={datasetId} />
+        ))}
     </div>
   );
 }
