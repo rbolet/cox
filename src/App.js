@@ -6,8 +6,11 @@ function App() {
   const [datasetId, setDatasetId] = useState("unknown");
 
   async function getDataset() {
-    const data = await fetch("https://http://api.coxauto-interview.com/api/datasetId");
-    setDatasetId(data);
+    const data = await fetch("http://api.coxauto-interview.com/api/datasetId").then((res) =>
+      res.json()
+    );
+    console.log(data);
+    setDatasetId(data?.datasetId);
   }
 
   return (
@@ -15,7 +18,9 @@ function App() {
       <header className="header">
         <div className="button-container">
           <h4>Get Vehicle Information:</h4>
-          <button className="go-button">GO!</button>
+          <button className="go-button" onClick={getDataset}>
+            GO!
+          </button>
         </div>
         <div>
           <p>
