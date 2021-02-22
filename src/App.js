@@ -5,23 +5,21 @@ import DealerCard from "./components/DealerCard";
 
 export default function App() {
   const [datasetId, setDatasetId] = useState(null);
-  const [fetchTime, setFetchTime] = useState("");
   const [displayData, setDisplayData] = useState([]);
+  const [time, setTime] = useState(null);
 
   async function getData() {
-    const start = Date.now();
     let id;
     const vehicles = await getDatasetId().then((datasetId) => {
       id = datasetId;
       setDatasetId(datasetId);
       return getVehicleIds(datasetId).then((ids) => getAllVehicleData(datasetId, ids));
     });
-    const fetchEnd = Date.now();
     const dealers = groupByDealer(vehicles);
     const response = await postAnswer(id, dealers);
 
-    setFetchTime(`${(fetchEnd - start) / 1000}`);
     setDisplayData(dealers);
+    setTime(`${parseInt(response.totalMilliseconds) / 1000}`);
   }
 
   let Cards = displayData.map((dealer) => <DealerCard key={dealer.dealerId} dealer={dealer} />);
@@ -46,7 +44,7 @@ export default function App() {
         </div>
       </header>
       <main style={{ padding: "1rem" }}>
-        {fetchTime && <InfoBar text={`API fetch time: ${fetchTime}ms`} />}
+        {datasetId && <InfoBar text={time} />}
         <div className="card-container">{Cards}</div>
       </main>
     </div>
@@ -55,9 +53,14 @@ export default function App() {
 
 function InfoBar(props) {
   const { text } = props;
-  return (
-    <div className="info-bar">
-      <p>{text}</p>
-    </div>
+  const Content = text ? (
+    <p>{`Time elapsed: ${text} seconds`}</p>
+  ) : (
+    <p className="thinking">
+      Fetching <span>.</span>
+      <span>.</span>
+      <span>.</span>
+    </p>
   );
+  return <div className="info-bar">{Content}</div>;
 }

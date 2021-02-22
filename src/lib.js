@@ -63,6 +63,5 @@ export async function postAnswer(datasetId, dealers) {
     method: "POST",
     body,
   }).then((res) => res.json());
-  console.log(response);
   return response;
 }
