@@ -3,7 +3,8 @@
   /* width: 100%; */
 }
 
-.header {
+.header,
+.info-bar {
   background-color: darkgray;
   /* width: 100%; */
   display: flex;
@@ -12,12 +13,18 @@
   padding: 0 1rem;
 }
 
+.info-bar {
+  background-color: darkseagreen;
+  margin-bottom: 1rem;
+}
+
 .header span {
   color: blue;
 }
 
 .button-container {
   display: flex;
+  align-items: center;
 }
 
 .go-button {

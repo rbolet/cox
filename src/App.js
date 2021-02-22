@@ -1,66 +1,32 @@
 import "./App.css";
-import { useState, useEffect, useCallback } from "react";
-import VehicleCard from "./components/VehicleCard";
+import { useState } from "react";
+import { getDatasetId, getVehicleIds, getAllVehicleData, groupByDealer } from "./lib";
+import DealerCard from "./components/DealerCard";
 
 export default function App() {
   const [datasetId, setDatasetId] = useState(null);
-  const [vehicleIds, setVehicleIds] = useState([]);
-  const [vehicles, setVehicles] = useState([]);
-  const [dealers, setDealers] = useState([]);
+  const [fetchTime, setFetchTime] = useState("");
+  const [displayData, setDisplayData] = useState([]);
 
-  const getVehicleIds = useCallback(async () => {
-    const data = await fetch(
-      `http://api.coxauto-interview.com/api/${datasetId}/vehicles`
-    ).then((res) => res.json());
+  async function getData() {
+    const start = Date.now();
+    const vehicles = await getDatasetId().then((datasetId) => {
+      setDatasetId(datasetId);
+      return getVehicleIds(datasetId).then((ids) => getAllVehicleData(datasetId, ids));
+    });
 
-    setVehicleIds(data.vehicleIds);
-  }, [datasetId]);
-
-  async function getDataset() {
-    const data = await fetch("http://api.coxauto-interview.com/api/datasetId").then((res) =>
-      res.json()
-    );
-    setDatasetId(data?.datasetId);
+    setFetchTime(`${(Date.now() - start) / 1000}`);
+    setDisplayData(groupByDealer(vehicles));
   }
 
-  function addVehicle(newVehicle) {
-    setVehicles([...vehicles, newVehicle]);
-  }
-
-  function addDealer(newDealer) {
-    setDealers([...dealers, newDealer]);
-  }
-
-  useEffect(() => {
-    if (!vehicleIds.length || !vehicles.length || !dealers.length) return;
-
-    if (vehicles.length === vehicleIds.length && dealers.length === vehicleIds.length) {
-      console.log("🚀 ~ file: App.js ~ line 39 ~ addVehicle ~ vehicles", vehicles);
-      console.log("🚀 ~ file: App.js ~ line 36 ~ useEffect ~ dealers", dealers);
-    }
-  }, [dealers, vehicles]);
-
-  useEffect(() => {
-    if (!datasetId) return;
-    getVehicleIds();
-  }, [datasetId, getVehicleIds]);
-
-  let Cards = vehicleIds.map((vehicleId) => (
-    <VehicleCard
-      key={vehicleId}
-      vehicleId={vehicleId}
-      datasetId={datasetId}
-      addDealer={addDealer}
-      addVehicle={addVehicle}
-    />
-  ));
+  let Cards = displayData.map((dealer) => <DealerCard key={dealer.dealerId} dealer={dealer} />);
 
   return (
     <div className="app-container">
       <header className="header">
         <div className="button-container">
           <h4>Get Vehicle Information:</h4>
-          <button className="go-button" onClick={getDataset}>
+          <button className="go-button" onClick={getData}>
             GO!
           </button>
         </div>
@@ -75,8 +41,18 @@ export default function App() {
         </div>
       </header>
       <main style={{ padding: "1rem" }}>
+        {fetchTime && <InfoBar text={`API fetch time: ${fetchTime}ms`} />}
         <div className="card-container">{Cards}</div>
       </main>
+    </div>
+  );
+}
+
+function InfoBar(props) {
+  const { text } = props;
+  return (
+    <div className="info-bar">
+      <p>{text}</p>
     </div>
   );
 }

@@ -1,5 +1,6 @@
-.vehicle-card {
+.dealer-card {
   background-color: dodgerblue;
+  border-radius: 1rem;
   color: white;
   padding: 1rem;
 }
