@@ -1,35 +1,14 @@
 .app-container {
   min-height: 100vh;
-  /* width: 100%; */
-}
-
-.header,
-.info-bar {
-  background-color: darkgray;
-  /* width: 100%; */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1rem;
 }
 
 .info-bar {
   background-color: darkseagreen;
-  margin-bottom: 1rem;
-}
-
-.header span {
-  color: blue;
-}
-
-.button-container {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-}
-
-.go-button {
-  margin: 1rem;
-  color: black;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
 }
 
 .content {

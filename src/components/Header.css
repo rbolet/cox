@@ -1,0 +1,21 @@
+.header {
+  background-color: darkgray;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.header span {
+  color: blue;
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+}
+
+.go-button {
+  margin: 1rem;
+  color: black;
+}
