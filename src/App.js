@@ -1,9 +1,20 @@
 import "./App.css";
-import { useState } from "react";
-import Vehicles from "./components/Vehicles";
+import { useState, useEffect, useCallback } from "react";
+import VehicleCard from "./components/VehicleCard";
 
 export default function App() {
   const [datasetId, setDatasetId] = useState(null);
+  const [vehicleIds, setVehicleIds] = useState([]);
+  const [vehicles, setVehicles] = useState([]);
+  const [dealers, setDealers] = useState([]);
+
+  const getVehicleIds = useCallback(async () => {
+    const data = await fetch(
+      `http://api.coxauto-interview.com/api/${datasetId}/vehicles`
+    ).then((res) => res.json());
+
+    setVehicleIds(data.vehicleIds);
+  }, [datasetId]);
 
   async function getDataset() {
     const data = await fetch("http://api.coxauto-interview.com/api/datasetId").then((res) =>
@@ -11,6 +22,38 @@ export default function App() {
     );
     setDatasetId(data?.datasetId);
   }
+
+  function addVehicle(newVehicle) {
+    setVehicles([...vehicles, newVehicle]);
+  }
+
+  function addDealer(newDealer) {
+    setDealers([...dealers, newDealer]);
+  }
+
+  useEffect(() => {
+    if (!vehicleIds.length || !vehicles.length || !dealers.length) return;
+
+    if (vehicles.length === vehicleIds.length && dealers.length === vehicleIds.length) {
+      console.log("🚀 ~ file: App.js ~ line 39 ~ addVehicle ~ vehicles", vehicles);
+      console.log("🚀 ~ file: App.js ~ line 36 ~ useEffect ~ dealers", dealers);
+    }
+  }, [dealers, vehicles]);
+
+  useEffect(() => {
+    if (!datasetId) return;
+    getVehicleIds();
+  }, [datasetId, getVehicleIds]);
+
+  let Cards = vehicleIds.map((vehicleId) => (
+    <VehicleCard
+      key={vehicleId}
+      vehicleId={vehicleId}
+      datasetId={datasetId}
+      addDealer={addDealer}
+      addVehicle={addVehicle}
+    />
+  ));
 
   return (
     <div className="app-container">
@@ -32,7 +75,7 @@ export default function App() {
         </div>
       </header>
       <main style={{ padding: "1rem" }}>
-        <Vehicles datasetId={datasetId} />
+        <div className="card-container">{Cards}</div>
       </main>
     </div>
   );
