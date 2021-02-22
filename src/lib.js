@@ -53,3 +53,16 @@ export function groupByDealer(vehicleData) {
     return dealer;
   });
 }
+
+export async function postAnswer(datasetId, dealers) {
+  const body = JSON.stringify({ dealers });
+  const response = await fetch(`http://api.coxauto-interview.com/api/${datasetId}/answer`, {
+    headers: {
+      "content-type": "application/json",
+    },
+    method: "POST",
+    body,
+  }).then((res) => res.json());
+  console.log(response);
+  return response;
+}

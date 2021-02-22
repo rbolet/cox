@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState } from "react";
-import { getDatasetId, getVehicleIds, getAllVehicleData, groupByDealer } from "./lib";
+import { getDatasetId, getVehicleIds, getAllVehicleData, groupByDealer, postAnswer } from "./lib";
 import DealerCard from "./components/DealerCard";
 
 export default function App() {
@@ -10,13 +10,18 @@ export default function App() {
 
   async function getData() {
     const start = Date.now();
+    let id;
     const vehicles = await getDatasetId().then((datasetId) => {
+      id = datasetId;
       setDatasetId(datasetId);
       return getVehicleIds(datasetId).then((ids) => getAllVehicleData(datasetId, ids));
     });
+    const fetchEnd = Date.now();
+    const dealers = groupByDealer(vehicles);
+    const response = await postAnswer(id, dealers);
 
-    setFetchTime(`${(Date.now() - start) / 1000}`);
-    setDisplayData(groupByDealer(vehicles));
+    setFetchTime(`${(fetchEnd - start) / 1000}`);
+    setDisplayData(dealers);
   }
 
   let Cards = displayData.map((dealer) => <DealerCard key={dealer.dealerId} dealer={dealer} />);
