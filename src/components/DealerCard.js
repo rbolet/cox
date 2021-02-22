@@ -1,5 +1,4 @@
 import "./DealerCard.css";
-import Vehicle from "./Vehicle";
 
 export default function DealerCard(props) {
   const { dealer } = props;
@@ -12,4 +11,9 @@ export default function DealerCard(props) {
       <ul>{Vehicles}</ul>
     </div>
   );
+}
+
+function Vehicle({ vehicle }) {
+  const { year, make, model } = vehicle;
+  return <li>{`${year} ${make} ${model}`}</li>;
 }
